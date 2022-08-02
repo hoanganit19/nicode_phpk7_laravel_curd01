@@ -14,5 +14,7 @@
         @yield('content')
     </div>
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @yield('js')
 </body>
 </html>

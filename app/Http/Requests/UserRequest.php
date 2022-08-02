@@ -23,9 +23,17 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->id;
+
+        if (!empty($id)){
+            $uniqueRule = 'unique:users,email,'.$id;
+        }else{
+            $uniqueRule = 'unique:users,email';
+        }
+
         return [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|'.$uniqueRule,
             'phone' => 'regex:/^0\d{9}$/i',
             'group_id' => ['required', function($attribute, $value, $fail){
                 if ($value==0){

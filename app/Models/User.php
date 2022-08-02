@@ -45,15 +45,46 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getUsers(){
-        return DB::table($this->table)
+    public function getUsers($perPage=0){
+        $users = DB::table($this->table)
             ->select('users.*', 'groups.name as group_name')
             ->orderBy('created_at', 'DESC')
-            ->join('groups', 'users.group_id', '=', 'groups.id')
-            ->get();
+            ->join('groups', 'users.group_id', '=', 'groups.id');
+
+        if (!empty($perPage)){
+            $users = $users->paginate($perPage)->withQueryString(); //Phân trang theo giới hạn $perPage
+        }else{
+            $users = $users->get(); //lấy tất cả bản ghi
+        }
+
+        return $users;
     }
 
     public function addUser($data){
         return DB::table($this->table)->insert($data);
+    }
+
+    public function getUser($id){
+        return DB::table($this->table)
+            ->where('id', $id)
+            ->first();
+    }
+
+    public function updateUser($data, $id){
+        return DB::table($this->table)
+            ->where('id', $id)
+            ->update($data);
+    }
+
+    public function deleteUser($id){
+        return DB::table($this->table)
+            ->where('id', $id)
+            ->delete();
+    }
+
+    public function deleteUsers($idArr){
+        return DB::table($this->table)
+            ->whereIn('id', $idArr)
+            ->delete();
     }
 }

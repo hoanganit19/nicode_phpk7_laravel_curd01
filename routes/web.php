@@ -29,4 +29,6 @@ Route::prefix('users')->name('users.')->group(function(){
     Route::post('edit/{id}', [UserController::class, 'postEdit']);
 
     Route::post('delete/{id}', [UserController::class, 'delete'])->name('delete');
+
+    Route::post('delete-selection', [UserController::class, 'deletes'])->name('deletes');
 });
